@@ -1,30 +1,62 @@
-﻿using UnityEngine;
+﻿using System.Security.Cryptography;
+using UnityEngine;
 
 public class MoveBehaviour : GenericBehaviour
 {
 	public float runSpeed = 1.0f;
+	public float jumpForce;
 	public Animator anim;
+	public bool isGrounded;
+	bool walk;
+	Rigidbody rb;
+
+	void OnCollisionEnter(Collision col) {
+		if (col.gameObject.tag == "ground")
+		{
+			isGrounded = true;
+		}
+	}
+
+	void OnCollisionExit(Collision col)
+	{
+		if (col.gameObject.tag == "ground")
+		{
+			isGrounded = false;
+		}
+	}
+
 
 	void Start()
 	{
 		behaviourManager.SubscribeBehaviour(this);
 		behaviourManager.RegisterDefaultBehaviour(this.behaviourCode);
 		anim = gameObject.GetComponent<Animator>();
+		rb = gameObject.GetComponent<Rigidbody>();
 	}
 
 	void Update()
 	{
+		JumpManagement();
 	}
 	public override void LocalFixedUpdate()
 	{
 		MovementManagement(behaviourManager.GetH, behaviourManager.GetV);
-
-		JumpManagement();
 	}
 
 	void JumpManagement()
 	{
+		if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && walk == true)
+		{
+			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+			anim.SetBool("Jump", true);
+		}
+		else anim.SetBool("Jump", false);
 
+		if (Input.GetKeyDown(KeyCode.Space)&& isGrounded == true && walk == false) {
+			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+			anim.SetBool("simpleJump", true);
+		}
+		else anim.SetBool("simpleJump", false);
 	}
 
 	void MovementManagement(float horizontal, float vertical)
@@ -33,8 +65,10 @@ public class MoveBehaviour : GenericBehaviour
 
 		if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)){
 			transform.Translate(0, 0, 0.3f);
+			walk = true;
 			anim.SetBool("Sprint", true);
 		}else{
+			walk = false;
 			anim.SetBool("Sprint", false);
 		}
 	}
@@ -64,5 +98,6 @@ public class MoveBehaviour : GenericBehaviour
 		}
 
 		return targetDirection;
+
 	}
 }
