@@ -33,9 +33,9 @@ public class MoveBehaviour : GenericBehaviour
 
 		if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)){
 			transform.Translate(0, 0, 0.3f);
-			anim.SetBool("walk", true);
+			anim.SetBool("Sprint", true);
 		}else{
-			anim.SetBool("walk", false);
+			anim.SetBool("Sprint", false);
 		}
 	}
 
