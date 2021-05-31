@@ -4,6 +4,7 @@ using UnityEngine;
 public class MoveBehaviour : GenericBehaviour
 {
 	public float runSpeed = 1.0f;
+	public float jumpSlowForce;
 	public float jumpForce;
 	public Animator anim;
 	public bool isGrounded;
@@ -15,7 +16,6 @@ public class MoveBehaviour : GenericBehaviour
 		if (col.gameObject.tag == "ground")
 		{
 			isGrounded = true;
-			anim.SetBool("Falling", false);
 		}
 	}
 
@@ -24,7 +24,6 @@ public class MoveBehaviour : GenericBehaviour
 		if (col.gameObject.tag == "ground")
 		{
 			isGrounded = false;;
-			anim.SetBool("Falling", true);
 		}
 	}
 
@@ -36,6 +35,7 @@ public class MoveBehaviour : GenericBehaviour
 		canMove = true;
 		anim = gameObject.GetComponent<Animator>();
 		rb = gameObject.GetComponent<Rigidbody>();
+
 	}
 
 	void Update()
@@ -49,9 +49,10 @@ public class MoveBehaviour : GenericBehaviour
 
 	void JumpManagement()
 	{
+		
 		if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && walk == true)
 		{
-			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
+			rb.AddForce(new Vector3(0, jumpSlowForce, 0), ForceMode.Impulse);
 			anim.SetBool("Jump", true);
 		}
 		else {
