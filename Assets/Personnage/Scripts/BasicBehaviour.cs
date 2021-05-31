@@ -292,7 +292,7 @@ public class BasicBehaviour : MonoBehaviour
 		{
 			lastDirection.y = 0;
 			Quaternion targetRotation = Quaternion.LookRotation (lastDirection);
-			Quaternion newRotation = Quaternion.Slerp(rBody.rotation, targetRotation, turnSmoothing);
+			Quaternion newRotation = Quaternion.Slerp(rBody.rotation, targetRotation, 0);
 			rBody.MoveRotation (newRotation);
 		}
 	}

@@ -6,7 +6,7 @@ public class MoveBehaviour : GenericBehaviour
 	public float runSpeed = 1.0f;
 	public float jumpSlowForce;
 	public float jumpForce;
-	public Animator anim;
+	//public Animator anim;
 	public bool isGrounded;
 	public bool canMove;
 	bool walk;
@@ -33,7 +33,7 @@ public class MoveBehaviour : GenericBehaviour
 		behaviourManager.SubscribeBehaviour(this);
 		behaviourManager.RegisterDefaultBehaviour(this.behaviourCode);
 		canMove = true;
-		anim = gameObject.GetComponent<Animator>();
+		//anim = gameObject.GetComponent<Animator>();
 		rb = gameObject.GetComponent<Rigidbody>();
 		Cursor.lockState = CursorLockMode.Locked;
 
@@ -42,9 +42,6 @@ public class MoveBehaviour : GenericBehaviour
 	void Update()
 	{
 		JumpManagement();
-	}
-	public override void LocalFixedUpdate()
-	{
 		MovementManagement(behaviourManager.GetH, behaviourManager.GetV);
 	}
 
@@ -54,17 +51,17 @@ public class MoveBehaviour : GenericBehaviour
 		if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && walk == true)
 		{
 			rb.AddForce(new Vector3(0, jumpSlowForce, 0), ForceMode.Impulse);
-			anim.SetBool("Jump", true);
+			//anim.SetBool("Jump", true);
 		}
 		else {
-			anim.SetBool("Jump", false);
+			//anim.SetBool("Jump", false);
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space)&& isGrounded == true && walk == false) {
 			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
-			anim.SetBool("simpleJump", true);
+			//anim.SetBool("simpleJump", true);
 		}
-		else anim.SetBool("simpleJump", false);
+		//else anim.SetBool("simpleJump", false);
 	}
 
 	void MovementManagement(float horizontal, float vertical)
@@ -73,13 +70,13 @@ public class MoveBehaviour : GenericBehaviour
 
 		if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)){
 			if (canMove == true) {
-				transform.Translate(0, 0, 0.3f);
+				rb.velocity = transform.forward * Time.deltaTime * 5000;
 				walk = true;
-				anim.SetBool("Sprint", true);
+				//anim.SetBool("Sprint", true);
 			}
 		}else{
 			walk = false;
-			anim.SetBool("Sprint", false);
+			//anim.SetBool("Sprint", false);
 		}
 	}
 
