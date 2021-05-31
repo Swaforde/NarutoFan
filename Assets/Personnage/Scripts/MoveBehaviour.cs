@@ -35,6 +35,7 @@ public class MoveBehaviour : GenericBehaviour
 		canMove = true;
 		anim = gameObject.GetComponent<Animator>();
 		rb = gameObject.GetComponent<Rigidbody>();
+		Cursor.lockState = CursorLockMode.Locked;
 
 	}
 
