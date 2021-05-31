@@ -65,21 +65,6 @@ public class BasicBehaviour : MonoBehaviour
 		// Store the input axes.
 		h = Input.GetAxis("Horizontal");
 		v = Input.GetAxis("Vertical");
-
-		// Toggle sprint by input.
-		sprint = Input.GetButton (sprintButton);
-
-		// Set the correct camera FOV for sprint mode.
-		if(IsSprinting())
-		{
-			changedFOV = true;
-			camScript.SetFOV(sprintFOV);
-		}
-		else if(changedFOV)
-		{
-			camScript.ResetFOV();
-			changedFOV = false;
-		}
 	}
 
 	// Call the FixedUpdate functions of the active or overriding behaviours.

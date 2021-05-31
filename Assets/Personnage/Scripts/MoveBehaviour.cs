@@ -7,6 +7,7 @@ public class MoveBehaviour : GenericBehaviour
 	public float jumpForce;
 	public Animator anim;
 	public bool isGrounded;
+	public bool canMove;
 	bool walk;
 	Rigidbody rb;
 
@@ -14,6 +15,7 @@ public class MoveBehaviour : GenericBehaviour
 		if (col.gameObject.tag == "ground")
 		{
 			isGrounded = true;
+			anim.SetBool("Falling", false);
 		}
 	}
 
@@ -21,7 +23,8 @@ public class MoveBehaviour : GenericBehaviour
 	{
 		if (col.gameObject.tag == "ground")
 		{
-			isGrounded = false;
+			isGrounded = false;;
+			anim.SetBool("Falling", true);
 		}
 	}
 
@@ -30,6 +33,7 @@ public class MoveBehaviour : GenericBehaviour
 	{
 		behaviourManager.SubscribeBehaviour(this);
 		behaviourManager.RegisterDefaultBehaviour(this.behaviourCode);
+		canMove = true;
 		anim = gameObject.GetComponent<Animator>();
 		rb = gameObject.GetComponent<Rigidbody>();
 	}
@@ -50,7 +54,9 @@ public class MoveBehaviour : GenericBehaviour
 			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
 			anim.SetBool("Jump", true);
 		}
-		else anim.SetBool("Jump", false);
+		else {
+			anim.SetBool("Jump", false);
+		}
 
 		if (Input.GetKeyDown(KeyCode.Space)&& isGrounded == true && walk == false) {
 			rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
@@ -64,9 +70,11 @@ public class MoveBehaviour : GenericBehaviour
 		Rotating(horizontal, vertical);
 
 		if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S)){
-			transform.Translate(0, 0, 0.3f);
-			walk = true;
-			anim.SetBool("Sprint", true);
+			if (canMove == true) {
+				transform.Translate(0, 0, 0.3f);
+				walk = true;
+				anim.SetBool("Sprint", true);
+			}
 		}else{
 			walk = false;
 			anim.SetBool("Sprint", false);
