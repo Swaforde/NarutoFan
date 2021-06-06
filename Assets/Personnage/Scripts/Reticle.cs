@@ -16,11 +16,11 @@ public class Reticle : MonoBehaviour
         Debug.DrawRay(transform.position, ray.direction * range, Color.red);
 
         if (Physics.Raycast(ray, out hit)){
-            if (hit.transform.tag == "ground"){
+            if (hit.transform.tag == "ground" && hit.distance <= 40){
                 reticle.sprite = reticleHit;
             }
         }
-        else {
+        else if {
              reticle.sprite = defaultReticle;
         }
 

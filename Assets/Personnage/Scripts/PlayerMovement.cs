@@ -111,6 +111,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Jump() {
-        rb.AddForce(new Vector3(0, jumpForce, 100), ForceMode.VelocityChange);
+        rb.velocity = new Vector3(0, jumpForce, 0);
     }
 }
