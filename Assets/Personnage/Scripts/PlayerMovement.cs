@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     private Animator anim;
 
     bool walk;
+    public bool canDoubleJump;
+    public bool canDoubleJump1;
     public bool grounded;
 
     float h;
@@ -49,14 +51,29 @@ public class PlayerMovement : MonoBehaviour
         }
         else walk = false;
 
-        if (Input.GetButtonDown("Jump") && walk == true)
+        if (Input.GetButtonDown("Jump") && walk == true && grounded == true)
         {
-            rb.velocity = Vector3.up * jumpForce * Time.fixedDeltaTime;
+            Jump();
+            anim.SetBool("Jump", true);
+            canDoubleJump = true;
+        }
+        else if (Input.GetButtonDown("Jump") && canDoubleJump)
+        {
+            Jump();
+            canDoubleJump = false;
         }
 
-        if (Input.GetButtonDown("Jump") && walk == false) {
-            rb.velocity = Vector3.up * jumpForce * Time.fixedDeltaTime;
+        if (Input.GetButtonDown("Jump") && walk == false && grounded == true)
+        {
+            Jump();
+            anim.SetBool("Jump", true);
+            canDoubleJump1 = true;
         }
+        else if (Input.GetButtonDown("Jump") && canDoubleJump1) {
+            Jump();
+            canDoubleJump1 = false;
+        }
+
 
 
         if (moveDir != new Vector3(0, 0, 0))
@@ -75,15 +92,25 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.tag == "ground") {
             grounded = true;
-            anim.SetBool("Jump", true);
+            anim.SetBool("Jump", false);
+            anim.SetBool("DoubleJump", false);
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.tag == "ground") {
-            grounded = false;
-            anim.SetBool("Jump", false);
+            anim.SetBool("Jump", true);
+            grounded = false;   
         }
+    }
+
+    IEnumerator wait() {
+        yield return new WaitForSeconds(1);
+        anim.SetBool("DoubleJump", false);
+    }
+
+    void Jump() {
+        rb.AddForce(new Vector3(0, jumpForce, 100), ForceMode.VelocityChange);
     }
 }
