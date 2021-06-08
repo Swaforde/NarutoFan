@@ -20,7 +20,7 @@ public class Reticle : MonoBehaviour
                 reticle.sprite = reticleHit;
             }
         }
-        else if {
+        else{
              reticle.sprite = defaultReticle;
         }
 

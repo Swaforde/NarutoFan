@@ -111,6 +111,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Jump() {
-        rb.velocity = new Vector3(0, jumpForce, 0);
+        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
     }
 }
