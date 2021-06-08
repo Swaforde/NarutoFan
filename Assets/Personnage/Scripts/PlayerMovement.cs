@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed;
+    public float rangeRaycast;
+    public float gravityStrength;
     public float jumpForce;
 
     public Transform Player;
@@ -24,12 +26,17 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+      
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
     }
 
     private void Update()
-    {     
+    {
+
+        Vector3 gravityS = new Vector3(0, gravityStrength, 0);
+        Physics.gravity = gravityS;
+
         h = Input.GetAxis("Horizontal");
         v = Input.GetAxis("Vertical");
 
@@ -86,23 +93,9 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("Sprint", true);
         }
         else anim.SetBool("Sprint", false);
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "ground") {
-            grounded = true;
-            anim.SetBool("Jump", false);
-            anim.SetBool("DoubleJump", false);
-        }
-    }
+        RayCastJump();
 
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "ground") {
-            anim.SetBool("Jump", true);
-            grounded = false;   
-        }
     }
 
     IEnumerator wait() {
@@ -111,6 +104,29 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Jump() {
-        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        rb.AddForce(new Vector3(0, jumpForce, 0));
     }
+
+    void RayCastJump()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position, Vector3.down);
+        Debug.DrawRay(transform.position, ray.direction * rangeRaycast, Color.red);
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.tag == "ground" && hit.distance <= rangeRaycast)
+            {
+                grounded = true;
+                anim.SetBool("Jump", false);
+                anim.SetBool("DoubleJump", false);
+            }
+            else
+            {
+                anim.SetBool("Jump", true);
+                grounded = false;
+            }
+        }
+    }
+
 }
