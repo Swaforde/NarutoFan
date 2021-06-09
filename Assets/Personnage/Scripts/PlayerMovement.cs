@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject instancePoint;
+    public GameObject target;
+    public GameObject kunai;
+    public float force;
+
     public float speed;
     public float rangeRaycast;
     public float gravityStrength;
@@ -20,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
     public bool canDoubleJump1;
     public bool grounded;
 
+
     float h;
     float v;
 
@@ -32,6 +38,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void Update()
+    {
+        Turn();
+        KunaiFire();
+    }
+
+    public void Turn()
     {
 
         Vector3 gravityS = new Vector3(0, gravityStrength, 0);
@@ -76,7 +88,8 @@ public class PlayerMovement : MonoBehaviour
             anim.SetBool("Jump", true);
             canDoubleJump1 = true;
         }
-        else if (Input.GetButtonDown("Jump") && canDoubleJump1) {
+        else if (Input.GetButtonDown("Jump") && canDoubleJump1)
+        {
             Jump();
             canDoubleJump1 = false;
         }
@@ -96,11 +109,6 @@ public class PlayerMovement : MonoBehaviour
 
         RayCastJump();
 
-    }
-
-    IEnumerator wait() {
-        yield return new WaitForSeconds(1);
-        anim.SetBool("DoubleJump", false);
     }
 
     void Jump() {
@@ -126,6 +134,19 @@ public class PlayerMovement : MonoBehaviour
                 anim.SetBool("Jump", true);
                 grounded = false;
             }
+        }
+    }
+
+    void KunaiFire() {
+
+        instancePoint.transform.LookAt(target.gameObject.transform);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            print("fire");
+            GameObject kunaiInstance = Instantiate(kunai, instancePoint.transform.position, instancePoint.transform.rotation);
+            kunaiInstance.GetComponent<Rigidbody>().velocity = instancePoint.transform.forward * force;
+
         }
     }
 
