@@ -10,6 +10,8 @@ public class Reticle : MonoBehaviour
     public GameObject hitPoint;
     public Image reticle;
     public float range;
+
+    public bool hitGround;
     void Update()
     {
         RaycastHit hit;
@@ -19,10 +21,12 @@ public class Reticle : MonoBehaviour
         if (Physics.Raycast(ray, out hit)){
             if (hit.transform.tag == "ground" && hit.distance <= range){
                 reticle.sprite = reticleHit;
+                hitGround = true;
             }
             else
             {
                 reticle.sprite = defaultReticle;
+                hitGround = false;
             }
         }
         hitPoint.transform.position = (hit.point);

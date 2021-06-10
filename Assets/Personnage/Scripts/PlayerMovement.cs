@@ -143,11 +143,19 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            print("fire");
-            GameObject kunaiInstance = Instantiate(kunai, instancePoint.transform.position, instancePoint.transform.rotation);
-            kunaiInstance.GetComponent<Rigidbody>().velocity = instancePoint.transform.forward * force;
+            Vector3 targetPos = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
+            transform.LookAt(targetPos);
 
+            StartCoroutine(test());
         }
+    }
+
+    IEnumerator test() {
+        yield return new WaitForSeconds(0.0001f);
+
+        print("fire");
+        GameObject kunaiInstance = Instantiate(kunai, instancePoint.transform.position, instancePoint.transform.rotation);
+        kunaiInstance.GetComponent<Rigidbody>().velocity = instancePoint.transform.forward * force;
     }
 
 }

@@ -48,10 +48,6 @@ public class ThirdPersonOrbitCamBasic : MonoBehaviour
 		ResetFOV ();
 		ResetMaxVerticalAngle();
 
-		// Check for no vertical offset.
-		if (camOffset.y > 0)
-			Debug.LogWarning("Vertical Cam Offset (Y) will be ignored during collisions!\n" +
-				"It is recommended to set all vertical offset in Pivot Offset.");
 	}
 
 	void Update()
