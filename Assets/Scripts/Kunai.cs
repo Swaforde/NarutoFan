@@ -9,6 +9,7 @@ public class Kunai : MonoBehaviour
 
     bool hitGround;
 
+    public float gravityScale;
 
     private void Start()
     {
@@ -18,9 +19,15 @@ public class Kunai : MonoBehaviour
         hitGround = false;
     }
 
+    private void Update()
+    {
+
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "ground") {
+            rb.useGravity = false;
             rb.velocity = new Vector3(0, 0, 0);
             col.enabled = false;
             if (hitGround == false) {
